@@ -51,6 +51,6 @@ func main() {
 	}
 	_, err = fout.WriteString(strings.Join(list, newline) + newline)
 	if err != nil {
-		log.Fatalf("error writing to buffer %w", err)
+		log.Fatalf("error writing to output %w", err)
 	}
 }
