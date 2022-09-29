@@ -25,10 +25,11 @@ func main() {
 		log.Fatal(err)
 	}
 	tokens := ws.Split(string(text), -1)
-	unique := make(map[string]bool)
+	unique := make(map[string]struct{})
+	empty := struct{}{}
 	for _, word := range tokens {
 		lower := strings.ToLower(word)
-		unique[lower] = true
+		unique[lower] = empty
 	}
 	list := make([]string, len(unique))
 	i := 0
