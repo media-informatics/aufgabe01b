@@ -9,20 +9,22 @@ import (
 	"strings"
 )
 
+const newline = "\n"
+
 func main() {
 	var fname string
 	var out string
 	flag.StringVar(&fname, "file", "bsptree.txt", "Pfad zu Textdatei")
-	flag.StringVar(&out, "out", "unique.txt", "Ausgabedatei")
+	flag.StringVar(&out, "out", "", "Ausgabedatei")
 	flag.Parse()
 
 	ws, err := regexp.Compile("([[:digit:]]|[[:space:]]|[[:punct:]])+")
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("regular expression not compiled %w", err)
 	}
 	text, err := os.ReadFile(fname)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("could not read file %w", err)
 	}
 	tokens := ws.Split(string(text), -1)
 	unique := make(map[string]struct{}) // go idiom, like Java HashSet
@@ -38,5 +40,17 @@ func main() {
 		i++
 	}
 	sort.Strings(list)
-	os.WriteFile(out, []byte(strings.Join(list, "\n")), 0664)
+
+	fout := os.Stdout
+	if len(out) > 0 {
+		fout, err = os.OpenFile(out, os.O_CREATE|os.O_WRONLY, 0644)
+		if err != nil {
+			log.Fatalf("error opening file %w", err)
+		}
+		defer fout.Close()
+	}
+	_, err = fout.WriteString(strings.Join(list, newline) + newline)
+	if err != nil {
+		log.Fatalf("error writing to buffer %w", err)
+	}
 }
