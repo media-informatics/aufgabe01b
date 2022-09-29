@@ -25,7 +25,7 @@ func main() {
 		log.Fatal(err)
 	}
 	tokens := ws.Split(string(text), -1)
-	unique := make(map[string]struct{})
+	unique := make(map[string]struct{}) // go idiom, like Java HashSet
 	empty := struct{}{}
 	for _, word := range tokens {
 		lower := strings.ToLower(word)
