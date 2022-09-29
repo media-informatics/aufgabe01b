@@ -9,18 +9,18 @@ import (
 	"strings"
 )
 
-var (
-	fname = flag.String("file", "bsptree.txt", "Pfad zu Textdatei")
-	out   = flag.String("out", "unique.txt", "Ausgabedatei")
-)
-
 func main() {
+	var fname string
+	var out string
+	flag.StringVar(&fname, "file", "bsptree.txt", "Pfad zu Textdatei")
+	flag.StringVar(&out, "out", "unique.txt", "Ausgabedatei")
 	flag.Parse()
+
 	ws, err := regexp.Compile("([[:digit:]]|[[:space:]]|[[:punct:]])+")
 	if err != nil {
 		log.Fatal(err)
 	}
-	text, err := os.ReadFile(*fname)
+	text, err := os.ReadFile(fname)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -38,5 +38,5 @@ func main() {
 		i++
 	}
 	sort.Strings(list)
-	os.WriteFile(*out, []byte(strings.Join(list, "\n")), 0664)
+	os.WriteFile(out, []byte(strings.Join(list, "\n")), 0664)
 }
